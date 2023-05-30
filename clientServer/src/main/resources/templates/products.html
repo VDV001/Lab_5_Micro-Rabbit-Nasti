@@ -1,0 +1,59 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Продукты</title>
+
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+        crossorigin="anonymous" />
+</head>
+
+<body>
+
+<div class="container" style="text-align: center">
+
+  <h3 th:text="${category}"></h3>
+
+  <hr/>
+  <div class="text-center row justify-content-center">
+    <div class="col-auto">
+  <table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+      <th>Название</th>
+      <th>Единицы измерения</th>
+      <th>Количество</th>
+      <th style="text-align: center">Заказ</th>
+      <th style="text-align: center">На склад</th>
+      <th style="text-align: center">Редактирование</th>
+      <th style="text-align: center">Удаление</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="product: ${products}">
+      <td th:text="${product.name}" />
+      <td th:text="${product.metric}" />
+      <td th:text="${product.count}" />
+      <td><a class="btn btn-primary" th:href="@{/categories/product/{catId}/order/{id}(id=${product.id}, catId=${catId})}">Заказать</a></td>
+      <td><a class="btn btn-primary" th:href="@{/categories/product/{catId}/stockOrder/{id}(id=${product.id}, catId=${catId})}">Заказать на склад</a></td>
+      <td><a class="btn btn-outline-warning" th:href="@{/categories/product/{catId}/edit/{id}(id=${product.id}, catId=${catId})}">Изменить</a></td>
+      <td><a class="btn btn-outline-danger" th:href="@{/categories/product/{catId}/delete/{id}(id=${product.id}, catId=${catId})}">Удалить</a></td>
+    </tr>
+    <br></table>
+    </div>
+    </div>
+
+  <p><a class="btn btn-success" th:href="@{/categories/{id}/newproduct(id=${catId})}">Добавить продукт</a></p>
+
+    <p><a href="/">Домой</a></p>
+    </tbody>
+
+
+</div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Изменение категории</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+          crossorigin="anonymous" />
+</head>
+
+<body>
+
+<div class="container" style="text-align: center">
+
+    <h3>Название категории: </h3>
+
+    <hr/>
+    <form class="form-group" action="#" th:action="@{/categories/updateCategory/{id}(id=${category.id})}" th:object="${category}" method="post">
+
+        <div class="form-row">
+            <label for="name">Название:</label>
+            <input type="text" class="form-control" th:field="*{name}" id="name">
+            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+        </div>
+
+        <br>
+        <div class="form-row">
+            <input class="btn btn-success" type="submit" value="Принять">
+        </div>
+        <p><a href="/">Домой</a></p>
+    </form>
+</div>
+
+</body>
+
+</html>

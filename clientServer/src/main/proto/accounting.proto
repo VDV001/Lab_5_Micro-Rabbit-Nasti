@@ -1,0 +1,169 @@
+syntax = "proto3";
+package com.app.grpc;
+
+//cud
+message requestCreateCategory
+{
+  string name = 1;
+}
+
+message responseCreateCategory
+{
+  int32 id = 1;
+  string name = 2;
+}
+
+message requestCreateStock
+{
+  int32 product = 1;
+}
+
+message responseCreateStock
+{
+  int32 id = 1;
+  int32 product = 2;
+  double count = 3;
+}
+
+message requestCreateProduct
+{
+  string name = 1;
+  string metric = 2;
+  int32 category = 3;
+}
+
+message responseCreateProduct
+{
+  int32 id = 1;
+  string name = 2;
+  string metric = 3;
+  int32 category = 4;
+}
+
+message requestStockOrder
+{
+  int32 id = 1;
+  double count = 2;
+}
+
+message responseStockOrder
+{
+  int32 id = 1;
+  double countNew = 2;
+}
+
+message requestUpdateCategory
+{
+  int32 id = 1;
+  string name = 2;
+}
+
+message requestUpdateProduct
+{
+  int32 id = 1;
+  string name = 2;
+  string metric = 3;
+  int32 category = 4;
+}
+
+message responseDelete
+{
+  bool deleted = 1;
+}
+
+//main
+message requestCountInCategory
+{
+  int32 category = 1;
+}
+
+message responseCountInCategory
+{
+  int32 category = 1;
+  string name = 2;
+  int64 count = 3;
+}
+
+message requestProductOrder
+{
+  int32 id = 1;
+  double count = 2;
+}
+
+message responseProductOrder
+{
+  int32 id = 1;
+  double countLeft = 2;
+}
+
+//read
+message requestGetById
+{
+  int32 id = 1;
+}
+
+message requestGetAll
+{
+
+}
+
+message responseGetProduct
+{
+  int32 id = 1;
+  string name = 2;
+  string metric = 3;
+  int32 category = 4;
+}
+
+message responseGetProducts
+{
+  repeated responseGetProduct products = 1;
+}
+
+message responseGetCategory
+{
+  int32 id = 1;
+  string name = 2;
+}
+
+message responseGetCategories
+{
+  repeated responseGetCategory categories = 1;
+}
+
+message responseGetStock
+{
+  int32 id = 1;
+  int32 product = 2;
+  double count = 3;
+}
+
+message responseGetStocks
+{
+  repeated responseGetStock stocks = 1;
+}
+
+service AccountingService
+{
+  rpc countInCategory(requestCountInCategory) returns (responseCountInCategory);
+  rpc orderProduct(requestProductOrder) returns (responseProductOrder);
+  rpc orderProductToStock(requestStockOrder) returns (responseStockOrder);
+
+  rpc createStock(requestCreateStock) returns (responseCreateStock);
+  rpc createCategory(requestCreateCategory) returns (responseCreateCategory);
+  rpc createProduct(requestCreateProduct) returns (responseCreateProduct);
+  rpc updateCategory(requestUpdateCategory) returns (responseCreateCategory);
+  rpc updateProduct(requestUpdateProduct) returns (responseCreateProduct);
+  rpc deleteCategory(requestGetById) returns (responseDelete);
+  rpc deleteProduct(requestGetById) returns (responseDelete);
+
+  rpc getProduct(requestGetById) returns (responseGetProduct);
+  rpc getCategory(requestGetById) returns (responseGetCategory);
+  rpc getStock(requestGetById) returns (responseGetStock);
+
+  rpc getProducts(requestGetAll) returns (responseGetProducts);
+  rpc getCategories(requestGetAll) returns (responseGetCategories);
+  rpc getStocks(requestGetAll) returns (responseGetStocks);
+  rpc getProductsByCategory(requestGetById) returns (responseGetProducts);
+  rpc getStockByProduct(requestGetById) returns (responseGetStock);
+}

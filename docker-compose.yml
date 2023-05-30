@@ -1,0 +1,91 @@
+version: "3.3"
+
+services:
+  client:
+    container_name: clientServer
+    build:
+      dockerfile: "./Dockerfile"
+      context: "./clientServer"
+    ports:
+      - "8081:8081"
+    networks:
+      - docker-network
+
+  server:
+    container_name: server
+    build:
+      dockerfile: "./Dockerfile1"
+      context: "./server"
+    ports:
+      - "7777:7777"
+    environment:
+      INSERTION_QUEUE: fromserver, toserver
+      VALIDATION_QUEUE: fromserver, toserver
+      NUMBER_OF_VALIDATION_CONSUMERS: 2
+      RESPONSE_EXCHANGE: newex
+      RESPONSE_ROUTING_KEY: inkey, outkey
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_VHOST: /
+      RABBITMQ_USERNAME: guest
+      RABBITMQ_PASSWORD: guest
+    networks:
+      - docker-network
+    depends_on:
+      - mysqldb
+      - rabbitmq
+
+  serverstore:
+    container_name: store
+    build:
+      dockerfile: "./Dockerfile2"
+      context: "./store"
+    environment:
+      INSERTION_QUEUE: fromserver, toserv    er
+      VALIDATION_QUEUE: fromserver, toserver
+      NUMBER_OF_VALIDATION_CONSUMERS: 2
+      RESPONSE_EXCHANGE: newex
+      RESPONSE_ROUTING_KEY: inkey, outkey
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_VHOST: /
+      RABBITMQ_USERNAME: guest
+      RABBITMQ_PASSWORD: guest
+    ports:
+      - "7778:8083"
+    networks:
+      - docker-network
+    depends_on:
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:3.11-management
+    container_name: 'rabbitmq'
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - docker-network
+
+  mysqldb:
+    image: "mysql:8"
+    restart: always
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: stock
+      MYSQL_ROOT_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - docker-network
+
+networks:
+  docker-network:
+    driver: bridge
+
+volumes:
+  mysql-data:

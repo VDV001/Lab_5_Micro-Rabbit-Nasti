@@ -1,0 +1,20 @@
+syntax = "proto3";
+package com.app.grpc;
+
+message requestStockOrder
+{
+  int32 id = 1;
+  double count = 2;
+}
+
+message responseStockOrder
+{
+  int32 id = 1;
+  double countNew = 2;
+}
+
+service StockService
+{
+  rpc orderProductToStock(requestStockOrder) returns (responseStockOrder);
+
+}
